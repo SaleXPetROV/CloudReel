@@ -91,6 +91,12 @@
         }
 
         #sidebar-tabs {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            overflow-x: visible;
             overflow-y: visible;
             padding-bottom: 0;
             padding: var(--sidebar-inner-padding) 0;
