@@ -256,7 +256,7 @@ export default async function({ id, index, toGif, dispatcher, alwaysProxy }) {
             }
 
             return {
-                type: needsFixing(media[0]) ? "remux" : "proxy",
+                type: shouldRenderGif ? "gif" : "proxy",
                 urls: bestQuality(media[0].video_info.variants),
                 filename: `twitter_${id}.mp4`,
                 audioFilename: `twitter_${id}_audio`,
@@ -290,7 +290,7 @@ export default async function({ id, index, toGif, dispatcher, alwaysProxy }) {
                 if (needsFixing(content) || shouldRenderGif) {
                     url = createStream({
                         service: "twitter",
-                        type: shouldRenderGif ? "gif" : "remux",
+                        type: shouldRenderGif ? "gif" : "proxy",
                         url,
                         filename: videoFilename,
                     })

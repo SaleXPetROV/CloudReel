@@ -162,69 +162,6 @@ const merge = (streamInfo, res) => {
     }
 }
 
-const remux = (streamInfo, res) => {
-    let process;
-    const shutdown = () => (
-        killProcess(process),
-        closeResponse(res),
-        destroyInternalStream(streamInfo.urls)
-    );
-
-    try {
-        let args = [
-            '-loglevel', '-8',
-            '-headers', toRawHeaders(getHeaders(streamInfo.service)),
-        ]
-
-        if (streamInfo.service === "twitter") {
-            args.push('-seekable', '0')
-        }
-
-        args.push(
-            '-i', streamInfo.urls,
-            '-c:v', 'copy',
-        )
-
-        if (streamInfo.type === "mute") {
-            args.push('-an');
-        }
-
-        if (hlsExceptions.includes(streamInfo.service)) {
-            if (streamInfo.type !== "mute") {
-                args.push('-c:a', 'aac')
-            }
-            args.push('-bsf:a', 'aac_adtstoasc');
-        }
-
-        let format = streamInfo.filename.split('.')[streamInfo.filename.split('.').length - 1];
-        if (format === "mp4") {
-            args.push('-movflags', 'faststart+frag_keyframe+empty_moov')
-        }
-
-        args.push('-f', format, 'pipe:3');
-
-        process = spawn(...getCommand(args), {
-            windowsHide: true,
-            stdio: [
-                'inherit', 'inherit', 'inherit',
-                'pipe'
-            ],
-        });
-
-        const [,,, muxOutput] = process.stdio;
-
-        res.setHeader('Connection', 'keep-alive');
-        res.setHeader('Content-Disposition', contentDisposition(streamInfo.filename));
-
-        pipe(muxOutput, res, shutdown);
-
-        process.on('close', shutdown);
-        res.on('finish', shutdown);
-    } catch {
-        shutdown();
-    }
-}
-
 const convertAudio = (streamInfo, res) => {
     let process;
     const shutdown = () => (
@@ -331,10 +268,25 @@ const convertGif = (streamInfo, res) => {
     }
 }
 
-export default {
+const direct = async (streamInfo, res) => {
+    // ... rest of direct function ...
+}
+
+const probe = async (streamInfo, res) => {
+    // ... rest of probe function ...
+}
+
+export {
     proxy,
     merge,
-    remux,
     convertAudio,
     convertGif,
-}
+    direct,
+    probe,
+    getHeaders,
+    createInternalStream,
+    destroyInternalStream,
+    createRequest,
+    closeRequest,
+    closeResponse,
+};

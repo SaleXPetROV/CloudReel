@@ -24,6 +24,9 @@ export default async function(res, streamInfo) {
 
             case "gif":
                 return stream.convertGif(streamInfo, res);
+
+            case "direct":
+                return stream.direct(streamInfo, res);
         }
 
         closeResponse(res);

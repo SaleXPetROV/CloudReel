@@ -72,7 +72,6 @@ we welcome all contributions and suggestions!
     sectionId="local"
 />
 
-newest features, such as [remuxing](/remux), work locally on your device.
 on-device processing is efficient and never sends anything over the internet.
 it perfectly aligns with our future goal of moving as much processing as possible to the client.
 </section>
