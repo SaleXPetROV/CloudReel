@@ -3,6 +3,7 @@
     import { device } from "$lib/device";
     import locale from "$lib/i18n/locale";
     import { t } from "$lib/i18n/translations";
+    import { page } from "$app/stores";
 
     import { openURL, copyURL, shareURL } from "$lib/download";
 
@@ -16,7 +17,7 @@
     import CobaltQr from "$components/icons/CobaltQR.svelte";
     import CopyIcon from "$components/misc/CopyIcon.svelte";
 
-    const cobaltUrl = "https://cloudreel.netlify.app/";
+    const cobaltUrl = $page.url.origin;
 
     let copied = false;
 
@@ -104,7 +105,7 @@
         class="donate-card-subtitle share-footer-link"
         class:centered={expanded}
     >
-        cloudreel.netlify.app
+        {$page.url.host}
     </div>
 </DonateCardContainer>
 
