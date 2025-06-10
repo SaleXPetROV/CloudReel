@@ -32,12 +32,12 @@ const donate = {
     stripe: "https://donate.stripe.com/3cs2cc6ew1Qda4wbII",
     liberapay: "https://liberapay.com/imput/donate",
     crypto: {
-        ethereum: "0x4B4cF23051c78c7A7E0eA09d39099621c46bc302",
-        monero: "4B1SNB6s8Pq1hxjNeKPEe8Qa8EP3zdL16Sqsa7QDoJcUecKQzEj9BMxWnEnTGu12doKLJBKRDUqnn6V9qfSdXpXi3Nw5Uod",
-        solana: "LJx4mxhvLJqDs65u4kxNgoKYGbZFfGCKGQjNApvfB7h",
-        litecoin: "ltc1qvp0xhrk2m7pa6p6z844qcslfyxv4p3vf95rhna",
-        bitcoin: "bc1qlvcnlnyzfsgnuxyxsv3k0p0q0yln0azjpadyx4",
-        ton: "UQA3SO-hHZq1oCCT--u6or6ollB8fd2o52aD8mXiLk9iDZd3",
+        ethereum: "0xec8197b35af7d60ff129a9950ee24108b344fdf1",
+        monero: "88wPepbTUNBJVnNdJJDWTU8K9XfUckuoNF2k4DDL5RLBBQghevuEstPgGhjqTtFjpXMpbizQGgvkn5zAXgMZPGY25aSwacF",
+        solana: "Gvwre3bhPyCggqycfeU7XUweu7j3nQ9JdLzTPRRgjMBB",
+        litecoin: "LQbTATqd15cPZ27MMa8gg9dAq3dPx2Hpom",
+        bitcoin: "1JfoTuRTQw9WXArLTMCv4nBxxNKAwk4LhQ",
+        ton: "UQBq1iqfu9P05AXPluA359dl_mcrWC7zJFQPKBsf5dYg37VS",
     },
     other: {
         boosty: "https://boosty.to/wukko/donate",
