@@ -54,8 +54,5 @@
         "typescript": "^5.4.5",
         "typescript-eslint": "^8.18.0",
         "vite": "^5.3.6"
-    },
-    "dependencies": {
-        "svelte-qrcode": "^1.0.1"
     }
 }

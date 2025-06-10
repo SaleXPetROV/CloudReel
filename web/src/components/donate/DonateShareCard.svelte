@@ -3,7 +3,6 @@
     import { device } from "$lib/device";
     import locale from "$lib/i18n/locale";
     import { t } from "$lib/i18n/translations";
-    import { page } from "$app/stores";
 
     import { openURL, copyURL, shareURL } from "$lib/download";
 
@@ -14,10 +13,10 @@
     import IconBrandTwitter from "@tabler/icons-svelte/IconBrandTwitter.svelte";
     import IconMoodSmileBeam from "@tabler/icons-svelte/IconMoodSmileBeam.svelte";
 
+    import CobaltQr from "$components/icons/CobaltQR.svelte";
     import CopyIcon from "$components/misc/CopyIcon.svelte";
-    import QrCode from "svelte-qrcode";
 
-    const cobaltUrl = $page.url.origin;
+    const cobaltUrl = "https://cloudreel.netlify.app/";
 
     let copied = false;
 
@@ -45,7 +44,7 @@
                 `a11y.donate.share.qr.${expanded ? "collapse" : "expand"}`
             )}
         >
-            <QrCode value={cobaltUrl} size={132} padding={0} />
+            <CobaltQr />
         </button>
         <div id="action-buttons">
             <button
@@ -105,7 +104,7 @@
         class="donate-card-subtitle share-footer-link"
         class:centered={expanded}
     >
-        {$page.url.host}
+        cloudreel.netlify.app
     </div>
 </DonateCardContainer>
 
