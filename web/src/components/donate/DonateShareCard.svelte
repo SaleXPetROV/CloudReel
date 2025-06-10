@@ -16,7 +16,7 @@
     import CobaltQr from "$components/icons/CobaltQR.svelte";
     import CopyIcon from "$components/misc/CopyIcon.svelte";
 
-    const cobaltUrl = "https://cobalt.tools/";
+    const cobaltUrl = "https://cloudreel.netlify.app/";
 
     let copied = false;
 
@@ -104,7 +104,7 @@
         class="donate-card-subtitle share-footer-link"
         class:centered={expanded}
     >
-        cobalt.tools
+        cloudreel.netlify.app
     </div>
 </DonateCardContainer>
 
