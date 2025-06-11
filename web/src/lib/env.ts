@@ -29,7 +29,7 @@ const partners = {
 }
 
 const donate = {
-    stripe: "https://donate.stripe.com/3cs2cc6ew1Qda4wbII",
+    stripe: "https://donate.stripe.com/test_5kQ8wP2PO5bc2Due55dAk00",
     liberapay: "https://liberapay.com/imput/donate",
     crypto: {
         ethereum: "0xec8197b35af7d60ff129a9950ee24108b344fdf1",
