@@ -19,7 +19,6 @@
 
     import ClearButton from "$components/save/buttons/ClearButton.svelte";
     import DownloadButton from "$components/save/buttons/DownloadButton.svelte";
-    import AdModal from "$components/AdModal.svelte";
 
     import Switcher from "$components/buttons/Switcher.svelte";
     import OmniboxIcon from "$components/save/OmniboxIcon.svelte";
@@ -38,7 +37,6 @@
 
     let isDisabled = false;
     let isLoading = false;
-    let showAdForPaste = false;
 
     $: isBotCheckOngoing = $turnstileEnabled && !$turnstileSolved;
 
@@ -76,14 +74,10 @@
             $link = linkMatch[0].split('，')[0];
 
             if (!isBotCheckOngoing) {
-                showAdForPaste = true;
+                await tick();
+                downloadButton.download($link);
             }
         }
-    };
-
-    const continuePasteDownload = async () => {
-        await tick(); // wait for button to render
-        downloadButton.download($link);
     };
 
     const changeDownloadMode = (mode: DownloadModeOption) => {
@@ -216,13 +210,6 @@
         </ActionButton>
     </div>
 </div>
-
-{#if showAdForPaste}
-    <AdModal on:adComplete={() => {
-        showAdForPaste = false;
-        continuePasteDownload();
-    }} />
-{/if}
 
 <style>
     #omnibox {

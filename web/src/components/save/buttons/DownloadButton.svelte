@@ -8,13 +8,13 @@
 
     import type { DialogInfo } from "$lib/types/dialog";
 
-    import AdModal from "$components/AdModal.svelte";
+    // import AdModal from "$components/AdModal.svelte";
 
     export let url: string;
     export let disabled = false;
     export let loading = false;
 
-    let showAd = false;
+    // let showAd = false;
 
     $: buttonText = ">>";
     $: buttonAltText = $t("a11y.save.download");
@@ -160,18 +160,20 @@
 <button
     id="download-button"
     {disabled}
-    on:click={() => (showAd = true)}
+    on:click={() => download(url)}
     aria-label={buttonAltText}
 >
     <span id="download-state">{buttonText}</span>
 </button>
 
+<!--
 {#if showAd}
     <AdModal on:adComplete={() => {
         showAd = false;
         download(url);
     }} />
 {/if}
+-->
 
 <style>
     #download-button {
