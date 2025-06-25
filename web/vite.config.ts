@@ -125,10 +125,6 @@ export default defineConfig({
         proxy: {}
     },
     optimizeDeps: {
-<<<<<<< HEAD
         exclude: ["@imput/libav.js-remux-cli"]
-=======
-        exclude: [] 
->>>>>>> 96c9367ea7b5d6c4bc6e6fbd65b45b64fe7b05d1
     },
 });

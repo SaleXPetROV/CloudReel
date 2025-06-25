@@ -34,6 +34,7 @@
     import IconClipboard from "$components/icons/Clipboard.svelte";
 
     let linkInput: Optional<HTMLInputElement>;
+    let downloadButton: any;
 
     const validLink = (url: string) => {
         try {
@@ -92,13 +93,8 @@
         if (linkMatch) {
             $link = linkMatch[0].split('，')[0];
 
-            if (!isBotCheckOngoing) {
-                await tick();
-                downloadButton.download($link);
-            } else {
-                await tick(); // wait for button to render
-                savingHandler({ url: $link });
-            }
+            await tick();
+            savingHandler({ url: $link });
         }
     };
 
@@ -199,6 +195,7 @@
             url={$link}
             bind:disabled={isDisabled}
             bind:loading={isLoading}
+            bind:this={downloadButton}
         />
     </div>
 
