@@ -65,3 +65,13 @@ if your friend hosts a processing instance, just ask them for a domain and [add 
 you can check the source code and contribute [on github]({contacts.github}) at any time.
 we welcome all contributions and suggestions!
 </section>
+
+<section id="local">
+<SectionHeading
+    title={$t("about.heading.local")}
+    sectionId="local"
+/>
+
+on-device processing is efficient and never sends anything over the internet.
+it perfectly aligns with our future goal of moving as much processing as possible to the client.
+</section>

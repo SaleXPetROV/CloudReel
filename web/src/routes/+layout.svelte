@@ -160,6 +160,7 @@
         display: flex;
         overflow: scroll;
         background-color: var(--primary);
+<<<<<<< HEAD
         box-shadow: 0 0 0 var(--content-border-thickness) var(--content-border);
         margin-left: var(--content-border-thickness);
     }
@@ -174,6 +175,12 @@
             border-top-left-radius: 0;
             border-top-right-radius: 8px;
         }
+=======
+        border-top-left-radius: var(--border-radius);
+        border-bottom-left-radius: var(--border-radius);
+        grid-column: 2;
+        grid-row: 1;
+>>>>>>> 96c9367ea7b5d6c4bc6e6fbd65b45b64fe7b05d1
     }
 
     #content:dir(rtl) {
@@ -208,6 +215,10 @@
 
             border-bottom-left-radius: calc(var(--border-radius) * 2);
             border-bottom-right-radius: calc(var(--border-radius) * 2);
+            margin-left: 0;
+            height: calc(100vh - var(--sidebar-height-mobile));
+            grid-column: unset;
+            grid-row: 1;
         }
     }
 

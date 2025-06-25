@@ -35,9 +35,9 @@
             {#if !$settings.appearance.hideRemuxTab}
                 <SidebarTab name="remux" path="/remux" icon={IconRepeat} beta />
             {/if}
+            <SidebarTab name="settings" path="/settings" icon={IconSettings} />
         </div>
         <div id="sidebar-info" class="sidebar-inner-container">
-            <SidebarTab name="settings" path={settingsLink} icon={IconSettings} />
             <SidebarTab name="donate" path="/donate" icon={IconHeart} />
             <SidebarTab name="updates" path="/updates" icon={IconComet} />
             <SidebarTab name="about" path={aboutLink} icon={IconInfoCircle} />
@@ -57,7 +57,7 @@
         background: var(--sidebar-bg);
         height: 100vh;
         width: calc(var(--sidebar-width) + var(--sidebar-inner-padding) * 2);
-        position: sticky;
+        position: fixed;
     }
 
     #sidebar-tabs {
@@ -98,6 +98,12 @@
         }
 
         #sidebar-tabs {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            overflow-x: visible;
             overflow-y: visible;
             overflow-x: scroll;
             padding: 0;

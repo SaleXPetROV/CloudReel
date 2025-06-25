@@ -166,6 +166,7 @@ const merge = async (streamInfo, res) => {
     }
 }
 
+<<<<<<< HEAD
 const remux = async (streamInfo, res) => {
     let process;
     const shutdown = () => (
@@ -231,6 +232,9 @@ const remux = async (streamInfo, res) => {
 }
 
 const convertAudio = async (streamInfo, res) => {
+=======
+const convertAudio = (streamInfo, res) => {
+>>>>>>> 96c9367ea7b5d6c4bc6e6fbd65b45b64fe7b05d1
     let process;
     const shutdown = () => (
         killProcess(process),
@@ -344,10 +348,25 @@ const convertGif = async (streamInfo, res) => {
     }
 }
 
-export default {
+const direct = async (streamInfo, res) => {
+    // ... rest of direct function ...
+}
+
+const probe = async (streamInfo, res) => {
+    // ... rest of probe function ...
+}
+
+export {
     proxy,
     merge,
-    remux,
     convertAudio,
     convertGif,
-}
+    direct,
+    probe,
+    getHeaders,
+    createInternalStream,
+    destroyInternalStream,
+    createRequest,
+    closeRequest,
+    closeResponse,
+};

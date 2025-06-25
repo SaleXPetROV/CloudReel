@@ -72,7 +72,7 @@ export default function({
 
         case "hls":
             params = {
-                type: Array.isArray(r.urls) ? "merge" : "remux",
+                type: Array.isArray(r.urls) ? "merge" : "direct",
                 isHLS: true,
             }
             break;

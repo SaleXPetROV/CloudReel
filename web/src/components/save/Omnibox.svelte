@@ -92,8 +92,13 @@
         if (linkMatch) {
             $link = linkMatch[0].split('，')[0];
 
-            await tick(); // wait for button to render
-            savingHandler({ url: $link });
+            if (!isBotCheckOngoing) {
+                await tick();
+                downloadButton.download($link);
+            } else {
+                await tick(); // wait for button to render
+                savingHandler({ url: $link });
+            }
         }
     };
 
