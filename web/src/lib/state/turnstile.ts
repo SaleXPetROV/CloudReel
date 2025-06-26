@@ -24,3 +24,31 @@ export const turnstileEnabled = derived(
             )
     }
 )
+
+if (typeof window !== 'undefined') {
+    // Создаём или находим div для логов
+    let logDiv = document.getElementById('debug-log');
+    if (!logDiv) {
+        logDiv = document.createElement('div');
+        logDiv.id = 'debug-log';
+        logDiv.style.position = 'fixed';
+        logDiv.style.top = '0';
+        logDiv.style.left = '0';
+        logDiv.style.background = 'rgba(255,255,255,0.95)';
+        logDiv.style.color = '#111';
+        logDiv.style.zIndex = '99999';
+        logDiv.style.fontSize = '12px';
+        logDiv.style.padding = '8px';
+        logDiv.style.border = '1px solid #ccc';
+        logDiv.style.maxWidth = '90vw';
+        logDiv.style.whiteSpace = 'pre-wrap';
+        document.body.appendChild(logDiv);
+    }
+
+    // Ваши данные для логирования
+    const ua = navigator.userAgent;
+    const isTg = /Telegram|WebView|tg:\/\/|tgb|TDesktop|TWebView/.test(ua);
+
+    // Выводим логи
+    logDiv.innerText = `User-Agent: ${ua}\nisTelegramWebView: ${isTg}`;
+}
