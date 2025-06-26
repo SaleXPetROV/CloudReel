@@ -43,7 +43,6 @@
     };
 
     let isFocused = $state(false);
-    let isDisabled = $state(false);
     let isLoading = $state(false);
 
     let isHovered = $state(false);
@@ -58,6 +57,18 @@
 
     let downloadable = $derived(validLink($link));
     let clearVisible = $derived($link && !isLoading);
+
+    function isTelegramWebView() {
+        if (!browser) return false;
+        const ua = navigator.userAgent || '';
+        return /Telegram|WebView|tg:\/\/|tgb|TDesktop|TWebView/.test(ua);
+    }
+
+    let isDisabled = $derived(
+        !browser
+            ? false
+            : (isTelegramWebView() ? false : isLoading || isBotCheckOngoing)
+    );
 
     $effect (() => {
         if (linkPrefill) {
