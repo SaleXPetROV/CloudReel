@@ -1,4 +1,4 @@
-import stream from "./types.js";
+import * as stream from "./types.js";
 
 import { closeResponse } from "./shared.js";
 import { internalStream } from "./internal.js";
@@ -23,14 +23,10 @@ export default async function(res, streamInfo) {
                 return await stream.convertAudio(streamInfo, res);
 
             case "gif":
-<<<<<<< HEAD
                 return await stream.convertGif(streamInfo, res);
-=======
-                return stream.convertGif(streamInfo, res);
 
             case "direct":
                 return stream.direct(streamInfo, res);
->>>>>>> 96c9367ea7b5d6c4bc6e6fbd65b45b64fe7b05d1
         }
 
         closeResponse(res);
