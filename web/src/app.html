@@ -61,6 +61,10 @@
                     document.body.id = `body-${appearance.theme}`;
                 }
             });
+
+            window.onerror = function(msg, url, line, col, error) {
+                document.body.insertAdjacentHTML('afterbegin', `<pre style="color:red">${msg} at ${line}:${col}</pre>`);
+            };
         </script>
     </head>
     <body data-sveltekit-preload-data="hover" data-sveltekit-preload-code="eager">
