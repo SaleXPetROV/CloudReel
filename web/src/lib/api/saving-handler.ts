@@ -40,7 +40,7 @@ export const savingHandler = async ({ url, request, oldTaskId }: SavingHandlerAr
 
     if (!request && !url) return;
 
-    const selectedRequest: CobaltSaveRequestBody = request || {
+    const selectedRequest = request || {
         url: url!,
 
         // not lazy cuz default depends on device capabilities
@@ -55,6 +55,8 @@ export const savingHandler = async ({ url, request, oldTaskId }: SavingHandlerAr
         audioBitrate: getSetting("save", "audioBitrate"),
         audioFormat: getSetting("save", "audioFormat"),
         tiktokFullAudio: getSetting("save", "tiktokFullAudio"),
+        youtubeDubLang: getSetting("save", "youtubeDubLang"),
+        youtubeBetterAudio: getSetting("save", "youtubeBetterAudio"),
 
         youtubeVideoCodec: getSetting("save", "youtubeVideoCodec"),
         videoQuality: getSetting("save", "videoQuality"),
@@ -63,16 +65,6 @@ export const savingHandler = async ({ url, request, oldTaskId }: SavingHandlerAr
         convertGif: getSetting("save", "convertGif"),
         allowH265: getSetting("save", "allowH265"),
     };
-
-    const youtubeDubLang = getSetting("save", "youtubeDubLang");
-    if (youtubeDubLang) {
-        selectedRequest.youtubeDubLang = youtubeDubLang;
-    }
-
-    const youtubeBetterAudio = getSetting("save", "youtubeBetterAudio");
-    if (youtubeBetterAudio) {
-        selectedRequest.youtubeBetterAudio = youtubeBetterAudio;
-    }
 
     const response = await API.request(selectedRequest);
 
