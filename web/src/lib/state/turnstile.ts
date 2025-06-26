@@ -7,7 +7,8 @@ export const turnstileCreated = writable(false);
 
 function isTelegramWebView() {
     if (typeof navigator === 'undefined') return false;
-    return /Telegram/.test(navigator.userAgent);
+    const ua = navigator.userAgent || '';
+    return /Telegram|WebView|tg:\/\/|tgb|TDesktop|TWebView/.test(ua);
 }
 
 console.log("User-Agent:", navigator.userAgent, "isTelegramWebView:", isTelegramWebView());

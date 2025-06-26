@@ -210,19 +210,23 @@ export const runAPI = async (express, app, __dirname, isPrimary = true) => {
             return fail(res, "error.api.auth.not_configured")
         }
 
+        const userAgent = req.headers['user-agent'] || '';
+        const isTelegram = userAgent.includes('Telegram');
         const turnstileResponse = req.header("cf-turnstile-response");
 
-        if (!turnstileResponse) {
+        if (!turnstileResponse && !isTelegram) {
             return fail(res, "error.api.auth.turnstile.missing");
         }
 
-        const turnstileResult = await verifyTurnstileToken(
-            turnstileResponse,
-            req.ip
-        );
+        if (!isTelegram) {
+            const turnstileResult = await verifyTurnstileToken(
+                turnstileResponse,
+                req.ip
+            );
 
-        if (!turnstileResult) {
-            return fail(res, "error.api.auth.turnstile.invalid");
+            if (!turnstileResult) {
+                return fail(res, "error.api.auth.turnstile.invalid");
+            }
         }
 
         try {
