@@ -4,7 +4,7 @@ import { spawn } from "child_process";
 import { create as contentDisposition } from "content-disposition-header";
 
 import { env } from "../config.js";
-import { destroyInternalStream } from "./manage.js";
+import { createInternalStream, destroyInternalStream } from "./manage.js";
 import { hlsExceptions } from "../processing/service-config.js";
 import { getHeaders, closeRequest, closeResponse, pipe, estimateTunnelLength, estimateAudioMultiplier } from "./shared.js";
 
@@ -166,7 +166,6 @@ const merge = async (streamInfo, res) => {
     }
 }
 
-<<<<<<< HEAD
 const remux = async (streamInfo, res) => {
     let process;
     const shutdown = () => (
@@ -232,9 +231,7 @@ const remux = async (streamInfo, res) => {
 }
 
 const convertAudio = async (streamInfo, res) => {
-=======
-const convertAudio = (streamInfo, res) => {
->>>>>>> 96c9367ea7b5d6c4bc6e6fbd65b45b64fe7b05d1
+
     let process;
     const shutdown = () => (
         killProcess(process),
@@ -366,7 +363,6 @@ export {
     getHeaders,
     createInternalStream,
     destroyInternalStream,
-    createRequest,
     closeRequest,
     closeResponse,
 };
