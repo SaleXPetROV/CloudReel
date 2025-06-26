@@ -23,6 +23,7 @@
     import { getServerInfo } from "$lib/api/server-info";
     import currentTheme, { statusBarColors } from "$lib/state/theme";
     import { turnstileCreated, turnstileEnabled } from "$lib/state/turnstile";
+    import { turnstileSolved } from "$lib/state/turnstile";
 
     import Sidebar from "$components/sidebar/Sidebar.svelte";
     import Turnstile from "$components/misc/Turnstile.svelte";
@@ -49,6 +50,9 @@
         if ($page.url.pathname === "/") {
             await getServerInfo();
         }
+
+        turnstileSolved.set(false);
+        turnstileCreated.set(false);
     });
 
     onMount(() => {
