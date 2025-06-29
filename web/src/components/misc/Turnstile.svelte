@@ -17,7 +17,7 @@
         clearTimeout(warningTimeout);
         warningTimeout = setTimeout(() => {
             showBotCheckWarning = true;
-        }, 10000); // 10 секунд
+        }, 1000); // 10 секунд
     }
 
     function reloadPage() {
