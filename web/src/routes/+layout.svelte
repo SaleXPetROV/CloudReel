@@ -42,6 +42,25 @@
     $: preloadAssets = false;
     $: plausibleLoaded = false;
 
+    let showGlobalBotCheckWarning = false;
+    let globalWarningTimeout: ReturnType<typeof setTimeout>;
+
+    function showGlobalWarningWithDelay() {
+        showGlobalBotCheckWarning = false;
+        clearTimeout(globalWarningTimeout);
+        globalWarningTimeout = setTimeout(() => {
+            showGlobalBotCheckWarning = true;
+        }, 10000); // 10 секунд
+    }
+
+    function reloadPage() {
+        window.location.reload();
+    }
+
+    function closeGlobalWarning() {
+        showGlobalBotCheckWarning = false;
+    }
+
     afterNavigate(async () => {
         const to_focus: HTMLElement | null =
             document.querySelector("[data-first-focus]");
@@ -57,6 +76,7 @@
 
     onMount(() => {
         preloadAssets = true;
+        showGlobalWarningWithDelay();
     });
 </script>
 
@@ -100,6 +120,17 @@
     data-theme={browser ? $currentTheme : undefined}
     lang={$locale}
 >
+    {#if showGlobalBotCheckWarning}
+        <div class="bot-check-warning-overlay">
+            <div class="bot-check-warning-modal" role="alert">
+                <button class="close-btn" aria-label="Закрыть" on:click={closeGlobalWarning}>&times;</button>
+                <div class="bot-check-warning-text">
+                    Проверка на бота занимает слишком много времени. Если ничего не происходит более 10 секунд, попробуйте обновить страницу.
+                </div>
+                <button class="refresh-btn" on:click={reloadPage}>Обновить страницу</button>
+            </div>
+        </div>
+    {/if}
     {#if preloadAssets}
         <div id="preload" aria-hidden="true">??</div>
     {/if}
@@ -228,5 +259,69 @@
         user-select: none;
         -webkit-user-select: none;
         -webkit-user-drag: none;
+    }
+
+    .bot-check-warning-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.25);
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .bot-check-warning-modal {
+        background: #fffbe6;
+        color: #b26a00;
+        border: 1px solid #ffe58f;
+        border-radius: 12px;
+        padding: 24px 28px 20px 24px;
+        font-size: 16px;
+        max-width: 400px;
+        min-width: 280px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+        font-weight: 500;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+    }
+    .bot-check-warning-text {
+        margin-bottom: 4px;
+    }
+    .refresh-btn {
+        background: #ffe58f;
+        color: #b26a00;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 18px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.15s;
+        align-self: flex-end;
+    }
+    .refresh-btn:hover {
+        background: #ffd666;
+    }
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        background: none;
+        border: none;
+        font-size: 22px;
+        color: #b26a00;
+        cursor: pointer;
+        font-weight: bold;
+        line-height: 1;
+        padding: 0;
+    }
+    .close-btn:hover {
+        color: #ff4d4f;
     }
 </style>
