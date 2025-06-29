@@ -12,6 +12,22 @@
     let showBotCheckWarning = false;
     let warningTimeout: ReturnType<typeof setTimeout>;
 
+    function resetWarning() {
+        showBotCheckWarning = false;
+        clearTimeout(warningTimeout);
+    }
+
+    function showWarningWithDelay() {
+        resetWarning();
+        warningTimeout = setTimeout(() => {
+            showBotCheckWarning = true;
+        }, 10000); // 10 секунд, как в тексте уведомления
+    }
+
+    function reloadPage() {
+        window.location.reload();
+    }
+
     onMount(() => {
         const sitekey = $cachedInfo?.info?.cobalt?.turnstileSitekey;
         if (!sitekey) return;
@@ -21,16 +37,12 @@
         // Сброс предупреждения при решении капчи
         const unsubscribe = turnstileSolved.subscribe(async (solved) => {
             if (solved) {
-                showBotCheckWarning = false;
-                clearTimeout(warningTimeout);
+                resetWarning();
                 await tick();
             }
         });
 
-        // Показываем предупреждение через 10 секунд
-        warningTimeout = setTimeout(() => {
-            showBotCheckWarning = true;
-        }, 10000);
+        showWarningWithDelay();
 
         const setup = () => {
             window.turnstile?.render(turnstileElement, {
@@ -57,7 +69,7 @@
         }
 
         return () => {
-            clearTimeout(warningTimeout);
+            resetWarning();
             unsubscribe();
         };
     });
@@ -75,7 +87,8 @@
     <div bind:this={turnstileElement} id="turnstile-widget"></div>
     {#if showBotCheckWarning}
         <div class="bot-check-warning" role="alert">
-            Проверка на бота занимает слишком много времени. Если ничего не происходит более 30 секунд, попробуйте <b>обновить страницу</b>.
+            Проверка на бота занимает слишком много времени. Если ничего не происходит более 10 секунд, попробуйте обновить страницу.
+            <button class="refresh-btn" on:click={reloadPage}>Обновить страницу</button>
         </div>
     {/if}
 </div>
@@ -97,5 +110,24 @@
         max-width: 350px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         font-weight: 500;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    .refresh-btn {
+        margin-top: 4px;
+        background: #ffe58f;
+        color: #b26a00;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+    .refresh-btn:hover {
+        background: #ffd666;
     }
 </style>
