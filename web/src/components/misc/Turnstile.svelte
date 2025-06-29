@@ -3,7 +3,7 @@
     import { tick } from "svelte";
 
     import cachedInfo from "$lib/state/server-info";
-    import { turnstileSolved, turnstileCreated } from "$lib/state/turnstile";
+    import { turnstileCreated } from "$lib/state/turnstile";
 
     import turnstile from "$lib/api/turnstile";
 
@@ -12,20 +12,20 @@
     let showBotCheckWarning = false;
     let warningTimeout: ReturnType<typeof setTimeout>;
 
-    function resetWarning() {
+    function showWarningWithDelay() {
         showBotCheckWarning = false;
         clearTimeout(warningTimeout);
-    }
-
-    function showWarningWithDelay() {
-        resetWarning();
         warningTimeout = setTimeout(() => {
             showBotCheckWarning = true;
-        }, 10000); // 10 секунд, как в тексте уведомления
+        }, 10000); // 10 секунд
     }
 
     function reloadPage() {
         window.location.reload();
+    }
+
+    function closeWarning() {
+        showBotCheckWarning = false;
     }
 
     onMount(() => {
@@ -33,14 +33,6 @@
         if (!sitekey) return;
 
         $turnstileCreated = true;
-
-        // Сброс предупреждения при решении капчи
-        const unsubscribe = turnstileSolved.subscribe(async (solved) => {
-            if (solved) {
-                resetWarning();
-                await tick();
-            }
-        });
 
         showWarningWithDelay();
 
@@ -57,7 +49,7 @@
                     turnstile.reset();
                 },
                 callback: () => {
-                    $turnstileSolved = true;
+                    // intentionally do nothing
                 }
             });
         }
@@ -69,8 +61,7 @@
         }
 
         return () => {
-            resetWarning();
-            unsubscribe();
+            clearTimeout(warningTimeout);
         };
     });
 </script>
@@ -86,9 +77,14 @@
 <div id="turnstile-container">
     <div bind:this={turnstileElement} id="turnstile-widget"></div>
     {#if showBotCheckWarning}
-        <div class="bot-check-warning" role="alert">
-            Проверка на бота занимает слишком много времени. Если ничего не происходит более 10 секунд, попробуйте обновить страницу.
-            <button class="refresh-btn" on:click={reloadPage}>Обновить страницу</button>
+        <div class="bot-check-warning-overlay">
+            <div class="bot-check-warning-modal" role="alert">
+                <button class="close-btn" aria-label="Закрыть" on:click={closeWarning}>&times;</button>
+                <div class="bot-check-warning-text">
+                    Проверка на бота занимает слишком много времени. Если ничего не происходит более 10 секунд, попробуйте обновить страницу.
+                </div>
+                <button class="refresh-btn" on:click={reloadPage}>Обновить страницу</button>
+            </div>
         </div>
     {/if}
 </div>
@@ -99,35 +95,67 @@
         z-index: 999;
         right: 0;
     }
-    .bot-check-warning {
-        margin-top: 16px;
+    .bot-check-warning-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.25);
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .bot-check-warning-modal {
         background: #fffbe6;
         color: #b26a00;
         border: 1px solid #ffe58f;
-        border-radius: 8px;
-        padding: 10px 16px;
-        font-size: 15px;
-        max-width: 350px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        border-radius: 12px;
+        padding: 24px 28px 20px 24px;
+        font-size: 16px;
+        max-width: 400px;
+        min-width: 280px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
         font-weight: 500;
+        position: relative;
         display: flex;
         flex-direction: column;
-        gap: 10px;
         align-items: flex-start;
+        gap: 18px;
+    }
+    .bot-check-warning-text {
+        margin-bottom: 4px;
     }
     .refresh-btn {
-        margin-top: 4px;
         background: #ffe58f;
         color: #b26a00;
         border: none;
         border-radius: 6px;
-        padding: 6px 14px;
-        font-size: 14px;
+        padding: 8px 18px;
+        font-size: 15px;
         font-weight: 500;
         cursor: pointer;
         transition: background 0.15s;
+        align-self: flex-end;
     }
     .refresh-btn:hover {
         background: #ffd666;
+    }
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        background: none;
+        border: none;
+        font-size: 22px;
+        color: #b26a00;
+        cursor: pointer;
+        font-weight: bold;
+        line-height: 1;
+        padding: 0;
+    }
+    .close-btn:hover {
+        color: #ff4d4f;
     }
 </style>
