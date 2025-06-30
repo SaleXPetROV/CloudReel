@@ -128,11 +128,13 @@
     {#if showGlobalBotCheckWarning}
         <div class="bot-check-warning-overlay">
             <div class="bot-check-warning-modal" role="alert">
-                <button class="close-btn" aria-label="Закрыть" on:click={closeGlobalWarning}>&times;</button>
                 <div class="bot-check-warning-text">
-                    Проверка на бота занимает слишком много времени. Если ничего не происходит более 10 секунд, попробуйте обновить страницу.
+                    Проверка на бота занимает слишком много времени. Если ничего не происходит более 15 секунд, попробуйте обновить страницу.
                 </div>
-                <button class="refresh-btn" on:click={reloadPage}>Обновить страницу</button>
+                <div class="bot-check-warning-buttons">
+                    <button class="close-btn" on:click={closeGlobalWarning}>Закрыть</button>
+                    <button class="refresh-btn" on:click={reloadPage}>Обновить</button>
+                </div>
             </div>
         </div>
     {/if}
@@ -272,61 +274,60 @@
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(0,0,0,0.25);
+        background: rgba(0, 0, 0, 0.25);
         z-index: 99999;
         display: flex;
         align-items: center;
         justify-content: center;
     }
     .bot-check-warning-modal {
-        background: #fffbe6;
-        color: #b26a00;
-        border: 1px solid #ffe58f;
+        background: white;
+        color: black;
+        border: 2px solid black;
         border-radius: 12px;
-        padding: 24px 28px 20px 24px;
+        padding: 24px;
         font-size: 16px;
         max-width: 400px;
         min-width: 280px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
         font-weight: 500;
-        position: relative;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
         gap: 18px;
     }
     .bot-check-warning-text {
         margin-bottom: 4px;
+        text-align: center;
     }
+    .bot-check-warning-buttons {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .close-btn,
     .refresh-btn {
-        background: #ffe58f;
-        color: #b26a00;
-        border: none;
         border-radius: 6px;
         padding: 8px 18px;
         font-size: 15px;
         font-weight: 500;
         cursor: pointer;
-        transition: background 0.15s;
-        align-self: flex-end;
-    }
-    .refresh-btn:hover {
-        background: #ffd666;
+        transition: all 0.15s;
+        width: 48%;
     }
     .close-btn {
-        position: absolute;
-        top: 10px;
-        right: 12px;
-        background: none;
-        border: none;
-        font-size: 22px;
-        color: #b26a00;
-        cursor: pointer;
-        font-weight: bold;
-        line-height: 1;
-        padding: 0;
+        background: black;
+        color: white;
+        border: 1px solid black;
     }
     .close-btn:hover {
-        color: #ff4d4f;
+        background: #333;
+    }
+    .refresh-btn {
+        background: white;
+        color: black;
+        border: 1px solid black;
+    }
+    .refresh-btn:hover {
+        background: #f0f0f0;
     }
 </style>
