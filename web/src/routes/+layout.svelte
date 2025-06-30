@@ -50,7 +50,12 @@
         clearTimeout(globalWarningTimeout);
         globalWarningTimeout = setTimeout(() => {
             showGlobalBotCheckWarning = true;
-        }, 10000); // 10 секунд
+        }, 15000); // 15 секунд
+    }
+
+    $: if ($turnstileSolved) {
+        clearTimeout(globalWarningTimeout);
+        showGlobalBotCheckWarning = false;
     }
 
     function reloadPage() {

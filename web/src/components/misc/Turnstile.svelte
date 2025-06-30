@@ -3,7 +3,7 @@
     import { tick } from "svelte";
 
     import cachedInfo from "$lib/state/server-info";
-    import { turnstileCreated } from "$lib/state/turnstile";
+    import { turnstileCreated, turnstileSolved } from "$lib/state/turnstile";
 
     import turnstile from "$lib/api/turnstile";
 
@@ -28,8 +28,10 @@
                 "expired-callback": () => {
                     turnstile.reset();
                 },
-                callback: () => {
-                    // intentionally do nothing
+                callback: (token: string) => {
+                    if (token) {
+                        turnstileSolved.set(true);
+                    }
                 }
             });
         }
