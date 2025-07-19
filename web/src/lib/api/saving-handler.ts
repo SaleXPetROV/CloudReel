@@ -76,9 +76,14 @@ export const savingHandler = async ({ url, request, oldTaskId }: SavingHandlerAr
     if (response.status === "error") {
         downloadButtonState.set("error");
 
-        return error(
-            get(t)(response.error.code, response?.error?.context)
-        );
+        let errorText = get(t)(response.error.code, response?.error?.context);
+
+        // Добавляем debugLog, если оно есть
+        if (response.debugLog) {
+            errorText += "\n\nDebug info:\n" + response.debugLog.join('\n');
+        }
+
+        return error(errorText);
     }
 
     if (response.status === "redirect") {

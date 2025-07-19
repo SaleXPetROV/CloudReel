@@ -17,6 +17,7 @@ export type CobaltErrorResponse = {
             limit?: number,
         }
     },
+    debugLog?: string[]
 };
 
 type CobaltPartialURLResponse = {
