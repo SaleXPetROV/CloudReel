@@ -88,6 +88,12 @@ const cloneInnertube = async (customFetch, useSession) => {
 }
 
 export default async function (o) {
+    // Извлекаем id из url, если id не передан, но есть url
+    if (!o.id && o.url) {
+        const match = o.url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
+        o.id = match ? match[1] : null;
+    }
+
     const quality = o.quality === "max" ? 9000 : Number(o.quality);
 
     let useHLS = o.youtubeHLS;
@@ -516,4 +522,26 @@ export default async function (o) {
     }
 
     return { error: "youtube.no_matching_format" };
+}
+
+async function pollFileTunnel(fileId, onProgress, onReady, onError) {
+  const maxWait = 120000; // 2 минуты
+  const interval = 3000; // 3 секунды
+  const start = Date.now();
+
+  while (Date.now() - start < maxWait) {
+    try {
+      const res = await fetch(`/tunnel?id=${fileId}`);
+      if (res.status === 200) {
+        onReady(res);
+        return;
+      }
+      if (onProgress) onProgress();
+    } catch (e) {
+      if (onError) onError(e);
+      return;
+    }
+    await new Promise(r => setTimeout(r, interval));
+  }
+  if (onError) onError(new Error("Timeout: file tunnel is still empty"));
 }

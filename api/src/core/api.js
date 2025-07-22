@@ -122,7 +122,10 @@ export const runAPI = async (express, app, __dirname, isPrimary = true) => {
         ...corsConfig,
     }));
 
+    app.use('/', express.json({ limit: 1024 }));
+
     app.post('/', (req, res, next) => {
+        console.log('INCOMING POST / REQUEST:', req.body);
         if (!acceptRegex.test(req.header('Accept'))) {
             return fail(res, "error.api.header.accept");
         }
@@ -192,7 +195,6 @@ export const runAPI = async (express, app, __dirname, isPrimary = true) => {
     });
 
     app.post('/', apiLimiter);
-    app.use('/', express.json({ limit: 1024 }));
 
     app.use('/', (err, _, res, next) => {
         if (err) {
@@ -248,7 +250,10 @@ export const runAPI = async (express, app, __dirname, isPrimary = true) => {
             return fail(res, "error.api.invalid_body");
         }
 
+        console.log('normalizeRequest success:', success, 'normalizedRequest:', normalizedRequest);
+
         const parsed = extract(normalizedRequest.url);
+        console.log('extract result:', parsed);
 
         if (!parsed) {
             return fail(res, "error.api.link.invalid");
@@ -286,6 +291,7 @@ export const runAPI = async (express, app, __dirname, isPrimary = true) => {
     }));
 
     app.get('/tunnel', apiTunnelLimiter, async (req, res) => {
+        console.log('[TUNNEL] Incoming request:', req.query);
         const id = String(req.query.id);
         const exp = String(req.query.exp);
         const sig = String(req.query.sig);
@@ -296,24 +302,44 @@ export const runAPI = async (express, app, __dirname, isPrimary = true) => {
         const checkBaseLength = id.length === 21 && exp.length === 13;
         const checkSafeLength = sig.length === 43 && sec.length === 43 && iv.length === 22;
 
+        console.log('[TUNNEL] checkQueries:', checkQueries, {id, exp, sig, sec, iv});
+        console.log('[TUNNEL] checkBaseLength:', checkBaseLength, {idLength: id.length, expLength: exp.length});
+        console.log('[TUNNEL] checkSafeLength:', checkSafeLength, {sigLength: sig.length, secLength: sec.length, ivLength: iv.length});
+
         if (!checkQueries || !checkBaseLength || !checkSafeLength) {
+            console.error('[TUNNEL] Invalid query parameters:', { id, exp, sig, sec, iv });
             return res.status(400).end();
         }
 
         if (req.query.p) {
+            console.log('[TUNNEL] Probe request (p=1)');
             return res.status(200).end();
         }
 
-        const streamInfo = await verifyStream(id, sig, exp, sec, iv);
+        let streamInfo;
+        try {
+            streamInfo = await verifyStream(id, sig, exp, sec, iv);
+            console.log('[TUNNEL] verifyStream result:', streamInfo);
+        } catch (e) {
+            console.error('[TUNNEL] Error in verifyStream:', e);
+            return res.status(500).end();
+        }
         if (!streamInfo?.service) {
-            return res.status(streamInfo.status).end();
+            console.error('[TUNNEL] No service in streamInfo:', streamInfo);
+            return res.status(streamInfo?.status || 404).end();
         }
 
         if (streamInfo.type === 'proxy') {
             streamInfo.range = req.headers['range'];
         }
 
-        return stream(res, streamInfo);
+        try {
+            console.log('[TUNNEL] Streaming with streamInfo:', streamInfo);
+            return stream(res, streamInfo);
+        } catch (e) {
+            console.error('[TUNNEL] Error in stream():', e);
+            return res.status(500).end();
+        }
     });
 
     app.get('/', (_, res) => {

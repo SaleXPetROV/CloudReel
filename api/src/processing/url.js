@@ -197,6 +197,7 @@ export function normalizeURL(url) {
 }
 
 export function extract(url) {
+    console.log('extract called with:', url);
     if (!(url instanceof URL)) {
         url = new URL(url);
     }
@@ -204,6 +205,7 @@ export function extract(url) {
     const host = getHostIfValid(url);
 
     if (!host) {
+        console.log('extract returning error: link.invalid');
         return { error: "link.invalid" };
     }
 
@@ -211,8 +213,10 @@ export function extract(url) {
         // show a different message when youtube is disabled on official instances
         // as it only happens when shit hits the fan
         if (new URL(env.apiURL).hostname.endsWith(".imput.net") && host === "youtube") {
+            console.log('extract returning error: youtube.temporary_disabled');
             return { error: "youtube.temporary_disabled" };
         }
+        console.log('extract returning error: service.disabled');
         return { error: "service.disabled" };
     }
 
@@ -228,6 +232,7 @@ export function extract(url) {
     }
 
     if (!patternMatch) {
+        console.log('extract returning error: link.unsupported');
         return {
             error: "link.unsupported",
             context: {
@@ -236,6 +241,7 @@ export function extract(url) {
         };
     }
 
+    console.log('extract returning success:', { host, patternMatch });
     return { host, patternMatch };
 }
 

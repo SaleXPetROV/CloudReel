@@ -33,6 +33,7 @@ import xiaohongshu from "./services/xiaohongshu.js";
 let freebind;
 
 export default async function({ host, patternMatch, params, isSession }) {
+    console.log('match called with:', { host, patternMatch, params, isSession });
     const { url } = params;
     assert(url instanceof URL);
     let dispatcher, requestIP;
@@ -56,7 +57,9 @@ export default async function({ host, patternMatch, params, isSession }) {
                 code: "error.api.service.unsupported"
             });
         }
+        console.log('testers[host] result:', testers[host](patternMatch), 'host:', host, 'patternMatch:', patternMatch);
         if (!(testers[host](patternMatch))) {
+            console.log('testers[host] returned false, skipping case');
             return createResponse("error", {
                 code: "error.api.link.unsupported",
                 context: {
@@ -130,14 +133,18 @@ export default async function({ host, patternMatch, params, isSession }) {
                 break;
 
             case "tiktok":
+                console.log('BEFORE tiktok handler');
+                // Разрешаем обработку через shortLink, даже если нет postId
                 r = await tiktok({
                     postId: patternMatch.postId,
                     shortLink: patternMatch.shortLink,
+                    url: params.url?.href,
                     fullAudio: params.tiktokFullAudio,
                     isAudioOnly,
                     h265: params.allowH265,
                     alwaysProxy: params.alwaysProxy,
                 });
+                console.log('AFTER tiktok handler');
                 break;
 
             case "tumblr":

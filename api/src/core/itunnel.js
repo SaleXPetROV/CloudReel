@@ -25,6 +25,7 @@ const validateTunnel = (req, res) => {
 }
 
 const streamTunnel = (req, res) => {
+    console.log('[ITUNNEL] Incoming request:', req.query);
     const streamInfo = validateTunnel(req, res);
     if (!streamInfo) {
         return;
